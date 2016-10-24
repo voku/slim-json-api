@@ -74,7 +74,7 @@ class JsonApiMiddleware extends Middleware
 
       if ($app->response()->body() === '') {
         $app->render(
-            500,
+            204,
             array(
                 'msg' => 'Empty response',
             )
