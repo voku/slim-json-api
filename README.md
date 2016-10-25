@@ -1,24 +1,23 @@
-#slim-jsonAPI
-[![Latest Stable Version](https://poser.pugx.org/entomb/slim-json-api/v/stable.png)](https://packagist.org/packages/entomb/slim-json-api)
-[![Total Downloads](https://poser.pugx.org/entomb/slim-json-api/downloads.png)](https://packagist.org/packages/entomb/slim-json-api)
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/entomb/slim-json-api/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+slim-json-api
+====
+
+WARNING: this is only q maintained Fork of "https://github.com/entomb/slim-json-api"
 
 This is an extension to the [SLIM framework](https://github.com/codeguy/Slim) to implement json API's with great ease.
 
-##Installation
+## Installation
 Using composer you can add use this as your composer.json
 
 ```json
-    {
-        "require": {
-            "slim/slim": "2.3.*",
-            "entomb/slim-json-api": "dev-master"
-        }
-    }
-
+{
+  "require": {
+    "slim/slim": "2.*",
+    "voku/slim-json-api": "2.*"
+  }
+}
 ```
 
-##Usage
+## Usage
 To include the middleware and view you just have to load them using the default _Slim_ way.
 Read more about Slim Here (https://github.com/codeguy/Slim#getting-started)
 
@@ -27,11 +26,11 @@ Read more about Slim Here (https://github.com/codeguy/Slim#getting-started)
 
     $app = new \Slim\Slim();
 
-    $app->view(new \JsonApiView());
-    $app->add(new \JsonApiMiddleware());
+    $app->view(new \voku\slim\JsonApiView());
+    $app->add(new \voku\slim\JsonApiMiddleware());
 ```
 
-###.htaccess sample
+### .htaccess sample
 Here's an .htaccess sample for simple RESTful API's
 ```
 RewriteEngine On
@@ -39,136 +38,137 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [QSA,L]
 ```
 
-###example method
+### example method
 all your requests will be returning a JSON output.
-the usage will be `$app->render( (int)$HTTP_CODE, (array)$DATA);`
+the usage will be `$app->render((int)$HTTP_CODE, (array)$DATA);`
 
-####example Code 
+#### example code 
 ```php
-
-    $app->get('/', function() use ($app) {
-        $app->render(200,array(
-                'msg' => 'welcome to my API!',
-            ));
-    });
-
+$app->get('/', function() use ($app) {
+  $app->render(
+      200,
+      array(
+          'msg' => 'welcome to my API!',
+      )
+  );
+});
 ```
 
 
-####example output
+#### example output
 ```json
 {
-    "msg":"welcome to my API!",
-    "error":false,
-    "status":200
+  "msg":"welcome to my API!",
+  "error":false,
+  "status":200
 }
 
 ```
 
-##Errors
+## Errors
 To display an error just set the `error => true` in your data array.
 All requests will have an `error` param that defaults to false.
 
 ```php
+$app->get('/user/:id', function($id) use ($app) {
 
-    $app->get('/user/:id', function($id) use ($app) {
+  // your code here
 
-        //your code here
-
-        $app->render(404,array(
-                'error' => TRUE,
-                'msg'   => 'user not found',
-            ));
-    });
-
+  $app->render(
+    404,
+    array(
+        'error' => TRUE,
+        'msg'   => 'user not found',
+    )
+  );
+});
 ```
+
 ```json
 {
-    "msg":"user not found",
-    "error":true,
-    "status":404
+  "msg":"user not found",
+  "error":true,
+  "status":404
 }
-
 ```
 
 You can optionally throw exceptions, the middleware will catch all exceptions and display error messages.
 
 ```php
+$app->get('/user/:id', function($id) use ($app) {
 
-    $app->get('/user/:id', function($id) use ($app) {
+  // your code here
 
-        //your code here
-
-        if(...){
-            throw new Exception("Something wrong with your request!");
-        }
-    });
-
+  if (...) {
+    throw new Exception("Something wrong with your request!");
+  }
+});
 ```
+
 ```json
 {
-    "error": true,
-    "msg": "ERROR: Something wrong with your request!",
-    "status": 500
+  "error": true,
+  "msg": "ERROR: Something wrong with your request!",
+  "status": 500
 }
-
 ```
 
-##Embedding response data and metadata in separate containers
+## Embedding response data and metadata in separate containers
 It is possible to separate response metadata and business information in separate containers.
 
-####To make it possible just init JsonApiView with containers names
+#### To make it possible just init JsonApiView with containers names
 ```php
-   require 'vendor/autoload.php';
+require 'vendor/autoload.php';
 
-    $app = new \Slim\Slim();
+$app = new \Slim\Slim();
 
-    $app->view(new \JsonApiView("data", "meta"));
-    $app->add(new \JsonApiMiddleware());
+$app->view(new \voku\slim\JsonApiView("data", "meta"));
+$app->add(new \voku\slim\JsonApiMiddleware());
 ```
 
-####Response
+#### Response
 ```json
 {
-    "data":{
-        "msg":"welcome to my API!"
-    },
-    "meta":{
-        "error":false,
-        "status":200
-    }
+  "data":{
+    "msg":"welcome to my API!"
+  },
+  "meta":{
+    "error":false,
+    "status":200
+  }
 }
 ```
 
-
-##routing specific requests to the API
+## routing specific requests to the API
 If your site is using regular HTML responses and you just want to expose an API point on a specific route,
 you can use Slim router middlewares to define this.
 
 ```php
-    function APIrequest(){
-        $app = \Slim\Slim::getInstance();
-        $app->view(new \JsonApiView());
-        $app->add(new \JsonApiMiddleware());
-    }
+function apiRequest() {
+  $app = \Slim\Slim::getInstance();
+  $app->view(new \voku\slim\JsonApiView());
+  $app->add(new \voku\slim\JsonApiMiddleware());
+}
 
+$app->get('/home', function() use ($app){
+  // regular html response
+  $app->render("template.tpl");
+});
 
-    $app->get('/home',function() use($app){
-        //regular html response
-        $app->render("template.tpl");
-    });
+$app->get('/api', 'apiRequest', function() use ($app){
+  // this request will have full json responses
 
-    $app->get('/api','APIrequest',function() use($app){
-        //this request will have full json responses
-
-        $app->render(200,array(
-                'msg' => 'welcome to my API!',
-            ));
-    });
+  $app->render(
+    200,
+    array(
+        'msg' => 'welcome to my API!',
+    )
+  );
+});
 ```
 
+## Middleware
 
-##middleware
 The middleware will set some static routes for default requests.
 **if you dont want to use it**, you can copy its content code into your bootstrap file.
 

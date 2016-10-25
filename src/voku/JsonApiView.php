@@ -4,6 +4,7 @@ namespace voku\slim;
 
 use Slim\Slim;
 use Slim\View;
+use voku\helper\UTF8;
 
 /**
  * JsonApiView - view wrapper for json responses (with error code).
@@ -179,9 +180,9 @@ class JsonApiView extends View
     $jsonp_callback = $app->request->get('callback', null);
 
     if ($jsonp_callback !== null) {
-      $app->response()->body($jsonp_callback . '(' . json_encode($response, $this->encodingOptions) . ')');
+      $app->response()->body($jsonp_callback . '(' . UTF8::json_encode($response, $this->encodingOptions) . ')');
     } else {
-      $app->response()->body(json_encode($response, $this->encodingOptions));
+      $app->response()->body(UTF8::json_encode($response, $this->encodingOptions));
     }
 
     $app->stop();
