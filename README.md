@@ -1,3 +1,11 @@
+[![Build Status](https://travis-ci.org/voku/slim-json-api.svg?branch=master)](https://travis-ci.org/voku/slim-json-api)
+[![Coverage Status](https://coveralls.io/repos/github/voku/slim-json-api/badge.svg?branch=master)](https://coveralls.io/github/voku/slim-json-api?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/slim-json-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/slim-json-api/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/voku/slim-json-api/v/stable)](https://packagist.org/packages/voku/slim-json-api) 
+[![Total Downloads](https://poser.pugx.org/voku/slim-json-api/downloads)](https://packagist.org/packages/voku/slim-json-api) 
+[![Latest Unstable Version](https://poser.pugx.org/voku/slim-json-api/v/unstable)](https://packagist.org/packages/voku/slim-json-api)
+[![License](https://poser.pugx.org/voku/slim-json-api/license)](https://packagist.org/packages/voku/slim-json-api)
+
 slim-json-api
 ====
 
