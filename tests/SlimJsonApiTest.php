@@ -1,6 +1,6 @@
 <?php
 
-class SlimJsonApiTest extends PHPUnit_Framework_TestCase
+class SlimJsonApiTest extends \PHPUnit\Framework\TestCase
 {
   public function testInit()
   {

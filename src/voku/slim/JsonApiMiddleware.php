@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace voku\slim;
 
 use Slim\Middleware;
@@ -20,18 +22,20 @@ class JsonApiMiddleware extends Middleware
     $app = Slim::getInstance($slimNameInstance);
 
     // Mirrors the API request
-    $app->get('/return', function () use ($app) {
+    $app->get(
+        '/return', function () use ($app) {
 
       $app->render(
           200,
-          array(
+          [
               'method'  => $app->request()->getMethod(),
               'name'    => $app->request()->get('name'),
               'headers' => $app->request()->headers(),
               'params'  => $app->request()->params(),
-          )
+          ]
       );
-    });
+    }
+    );
 
     // Generic error handler
     $app->error(
@@ -45,9 +49,9 @@ class JsonApiMiddleware extends Middleware
 
           $app->render(
               $errorCode,
-              array(
+              [
                   'msg' => $message,
-              )
+              ]
           );
         }
     );
@@ -57,15 +61,16 @@ class JsonApiMiddleware extends Middleware
         function () use ($app) {
           $app->render(
               404,
-              array(
+              [
                   'msg' => 'Invalid route',
-              )
+              ]
           );
         }
     );
 
     // Handle Empty response body
-    $app->hook('slim.after.router', function () use ($app) {
+    $app->hook(
+        'slim.after.router', function () use ($app) {
 
       // INFO: this will allow download request to flow
       if ($app->response()->header('Content-Type') === 'application/octet-stream') {
@@ -75,12 +80,13 @@ class JsonApiMiddleware extends Middleware
       if ($app->response()->body() === '') {
         $app->render(
             500,
-            array(
+            [
                 'msg' => 'Empty response',
-            )
+            ]
         );
       }
-    });
+    }
+    );
   }
 
   /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace voku\slim;
 
 use Slim\Slim;
@@ -66,7 +68,7 @@ class JsonApiView extends View
   /**
    * @return int
    */
-  public function getEncodingOptions()
+  public function getEncodingOptions(): int
   {
     return $this->encodingOptions;
   }
@@ -95,7 +97,7 @@ class JsonApiView extends View
   /**
    * @return string
    */
-  public function getContentType()
+  public function getContentType(): string
   {
     return $this->contentType;
   }
@@ -114,14 +116,12 @@ class JsonApiView extends View
 
   /**
    * @param int    $status
-   * @param null   $data
+   * @param mixed  $data
    * @param string $slimNameInstance
    */
   public function render($status = 200, $data = null, $slimNameInstance = 'default')
   {
     $app = Slim::getInstance($slimNameInstance);
-
-    $status = (int)$status;
 
     if ($this->dataWraper) {
       $response[$this->dataWraper] = $this->all();
@@ -153,7 +153,7 @@ class JsonApiView extends View
       }
 
       // add flash messages
-      if (isset($this->data->flash) && is_object($this->data->flash)) {
+      if (isset($this->data->flash) && \is_object($this->data->flash)) {
         $flash = $this->data->flash->getMessages();
 
         if ($this->dataWraper) {
@@ -162,7 +162,7 @@ class JsonApiView extends View
           unset($response['flash']);
         }
 
-        if (count($flash)) {
+        if (\count($flash)) {
           if ($this->metaWrapper) {
             $response[$this->metaWrapper]['flash'] = $flash;
           } else {
